@@ -14,6 +14,18 @@ Vagrant.configure(2) do |config|
     sudo service ssh restart
   EOC
 
+  # Install docker
+  config.vm.provision :docker
+
+  # Install docker-compose
+  config.vm.provision "shell", inline: <<-EOC
+    curl -L https://github.com/docker/compose/releases/download/1.5.1/docker-compose-`uname -s`-`uname -m` \\
+      | sudo tee /usr/local/bin/docker-compose > /dev/null
+    sudo chmod +x /usr/local/bin/docker-compose
+    curl -L https://raw.githubusercontent.com/docker/compose/$(docker-compose --version | awk 'NR==1{print $NF}')/contrib/completion/bash/docker-compose \\
+      | sudo tee /etc/bash_completion.d/docker-compose > /dev/null
+  EOC
+
   config.vm.provider "virtualbox" do |vb|
     vb.cpus = 2
     vb.memory = 1024 * 4
