@@ -1,0 +1,34 @@
+es:
+  image: ermaker/elasticsearch
+  user: '1000'
+  volumes:
+    - /opt/elasticsearch/data:/opt/elasticsearch/data
+    - ./elasticsearch/elasticsearch.yml:/opt/elasticsearch/config/elasticsearch.yml:ro
+    - /etc/passwd:/etc/passwd:ro
+    - /etc/group:/etc/group:ro
+  environment:
+    - ES_HEAP_SIZE=1g
+  ports:
+    - '9200:9200'
+    - '9300:9300'
+  restart: always
+kibana:
+  image: ermaker/kibana
+  volumes:
+    - ./kibana/kibana.yml:/opt/kibana/config/kibana.yml:ro
+  ports:
+    - '5601:5601'
+  links:
+    - es
+  restart: always
+fluentd:
+  image: seapy/fluentd-es
+  entrypoint: /usr/sbin/td-agent
+  volumes:
+    - ./fluentd/td-agent.conf:/etc/td-agent/td-agent.conf:ro
+    - /var/lib/docker:/var/lib/docker
+  links:
+    - es
+  ports:
+    - '24224:24224'
+  restart: always

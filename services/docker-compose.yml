@@ -1,0 +1,47 @@
+redis:
+  image: redis
+  command: redis-server --appendonly yes
+  volumes:
+    - /opt/redis/data:/data
+  restart: always
+  log_driver: fluentd
+  log_opt:
+    tag: docker.{{.Name}}
+mongo:
+  image: mongo
+  command: --smallfiles
+  volumes:
+    - /opt/mongo/data/db:/data/db
+  restart: always
+  log_driver: fluentd
+  log_opt:
+    tag: docker.{{.Name}}
+mshard:
+  image: ermaker/mshard_server
+  links:
+    - redis
+  env_file: .env.mshard
+  environment:
+    - VIRTUAL_HOST=mshard.d.ermaker.tk
+  restart: always
+  log_driver: fluentd
+  log_opt:
+    tag: docker.{{.Name}}
+nginx:
+  image: nginx
+  volumes:
+    - ./html/:/usr/share/nginx/html:ro
+  environment:
+    - VIRTUAL_HOST=d.ermaker.tk
+  restart: always
+  log_driver: fluentd
+nginx-proxy:
+  image: jwilder/nginx-proxy
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+  ports:
+    - '80:80'
+  restart: always
+  log_driver: fluentd
+  log_opt:
+    tag: docker.{{.Name}}
