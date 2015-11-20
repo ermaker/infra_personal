@@ -4,6 +4,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "public_network"
 
   config.vm.network "forwarded_port", guest: 80, host: 80
+  config.vm.network "forwarded_port", guest: 24224, host: 24224
 
   # ssh settings
   config.vm.network "forwarded_port", guest: 22, host: 3333
