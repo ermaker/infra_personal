@@ -4,18 +4,12 @@ redis:
   volumes:
     - /opt/redis/data:/data
   restart: always
-  log_driver: fluentd
-  log_opt:
-    tag: tag.raw.docker.{{.Name}}
 mongo:
   image: mongo
   command: --smallfiles
   volumes:
     - /opt/mongo/data/db:/data/db
   restart: always
-  log_driver: fluentd
-  log_opt:
-    tag: tag.raw.docker.{{.Name}}
 mshard:
   image: ermaker/mshard_server
   links:
@@ -24,9 +18,6 @@ mshard:
   environment:
     - VIRTUAL_HOST=mshard.d.ermaker.tk
   restart: always
-  log_driver: fluentd
-  log_opt:
-    tag: tag.raw.docker.{{.Name}}
 nginx:
   image: nginx
   volumes:
@@ -34,9 +25,6 @@ nginx:
   environment:
     - VIRTUAL_HOST=d.ermaker.tk
   restart: always
-  log_driver: fluentd
-  log_opt:
-    tag: tag.raw.docker.{{.Name}}
 nginx-proxy:
   image: jwilder/nginx-proxy
   volumes:
@@ -44,6 +32,10 @@ nginx-proxy:
   ports:
     - '80:80'
   restart: always
-  log_driver: fluentd
-  log_opt:
-    tag: tag.raw.docker.{{.Name}}
+fluentd:
+  image: ermaker/fluentd
+  env_file: .env.fluentd
+  volumes:
+    - ./fluentd/td-agent.conf:/etc/td-agent/td-agent.conf:ro
+    - /var/lib/docker:/var/lib/docker
+  restart: always

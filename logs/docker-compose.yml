@@ -20,12 +20,26 @@ kibana:
   restart: always
 fluentd:
   image: ermaker/fluentd
+  env_file: .env.fluentd
   volumes:
     - ./fluentd/td-agent.conf:/etc/td-agent/td-agent.conf:ro
     - /var/lib/docker:/var/lib/docker
   links:
     - es
   ports:
-    - '24224:24224'
-    - '24224:24224/udp'
+    - '24284:24284'
+  restart: always
+nginx:
+  image: nginx
+  volumes:
+    - ./html/:/usr/share/nginx/html:ro
+  environment:
+    - VIRTUAL_HOST=d.ermaker.tk
+  restart: always
+nginx-proxy:
+  image: jwilder/nginx-proxy
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+  ports:
+    - '80:80'
   restart: always

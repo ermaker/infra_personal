@@ -1,14 +1,7 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
 
-  config.vm.network "public_network"
-
-  config.vm.network "forwarded_port", guest: 80, host: 80
-  config.vm.network "forwarded_port", guest: 24224, host: 24224
-
   # ssh settings
-  config.vm.network "forwarded_port", guest: 22, host: 3333
-  config.ssh.port = 3333
   config.ssh.insert_key = false
   config.ssh.private_key_path = ["keys/private", "~/.vagrant.d/insecure_private_key"]
   config.vm.provision :file, source: "keys/public", destination: "~/.ssh/authorized_keys"
@@ -31,20 +24,48 @@ Vagrant.configure(2) do |config|
       | sudo tee /etc/bash_completion.d/docker-compose > /dev/null
   EOC
 
-  config.vm.provision :shell, inline: <<-EOC
-    cd /vagrant/logs
-    ./mkdirs.sh
-    docker-compose up -d
-  EOC
+  config.vm.define :log do |config|
+    config.vm.network "public_network"
 
-  config.vm.provision :shell, inline: <<-EOC
-    cd /vagrant/services
-    ./mkdirs.sh
-    docker-compose up -d
-  EOC
+    config.vm.network "forwarded_port", guest: 80, host: 8080
+    config.vm.network "forwarded_port", guest: 24284, host: 24284
 
-  config.vm.provider "virtualbox" do |vb|
-    vb.cpus = 2
-    vb.memory = 1024 * 4
+    # ssh settings
+    config.vm.network "forwarded_port", guest: 22, host: 3333
+    config.ssh.port = 3333
+
+    config.vm.provision :shell, inline: <<-EOC
+      cd /vagrant/logs
+      ./mkdirs.sh
+      docker-compose pull
+      docker-compose up -d
+    EOC
+
+    config.vm.provider "virtualbox" do |vb|
+      vb.cpus = 2
+      vb.memory = 1024 * 4
+    end
+  end
+
+  config.vm.define :service do |config|
+    config.vm.network "public_network"
+
+    config.vm.network "forwarded_port", guest: 80, host: 80
+
+    # ssh settings
+    config.vm.network "forwarded_port", guest: 22, host: 3334
+    config.ssh.port = 3334
+
+    config.vm.provision :shell, inline: <<-EOC
+      cd /vagrant/services
+      ./mkdirs.sh
+      docker-compose pull
+      docker-compose up -d
+    EOC
+
+    config.vm.provider "virtualbox" do |vb|
+      vb.cpus = 1
+      vb.memory = 1024
+    end
   end
 end
