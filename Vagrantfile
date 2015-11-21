@@ -25,6 +25,8 @@ Vagrant.configure(2) do |config|
   EOC
 
   config.vm.define :log do |config|
+    config.vm.hostname = "log"
+
     config.vm.network "public_network"
 
     config.vm.network "forwarded_port", guest: 80, host: 8080
@@ -48,6 +50,8 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define :service do |config|
+    config.vm.hostname = "service"
+
     config.vm.network "public_network"
 
     config.vm.network "forwarded_port", guest: 80, host: 80
