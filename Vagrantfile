@@ -35,7 +35,7 @@ Vagrant.configure(2) do |config|
     config.ssh.port = 3333
 
     config.vm.provision :shell, inline: <<-EOC
-      cd /vagrant/logs
+      cd /vagrant/log
       ./mkdirs.sh
       docker-compose pull
       docker-compose up -d
@@ -57,7 +57,7 @@ Vagrant.configure(2) do |config|
     config.ssh.port = 3334
 
     config.vm.provision :shell, inline: <<-EOC
-      cd /vagrant/services
+      cd /vagrant/service
       ./mkdirs.sh
       docker-compose pull
       docker-compose up -d
@@ -65,7 +65,7 @@ Vagrant.configure(2) do |config|
 
     config.vm.provider "virtualbox" do |vb|
       vb.cpus = 1
-      vb.memory = 1024
+      vb.memory = 512
     end
   end
 end
