@@ -6,7 +6,7 @@ redis:
   restart: always
   log_driver: fluentd
   log_opt:
-    tag: docker.{{.Name}}
+    tag: tag.raw.docker.{{.Name}}
 mongo:
   image: mongo
   command: --smallfiles
@@ -15,7 +15,7 @@ mongo:
   restart: always
   log_driver: fluentd
   log_opt:
-    tag: docker.{{.Name}}
+    tag: tag.raw.docker.{{.Name}}
 mshard:
   image: ermaker/mshard_server
   links:
@@ -26,7 +26,7 @@ mshard:
   restart: always
   log_driver: fluentd
   log_opt:
-    tag: docker.{{.Name}}
+    tag: tag.raw.docker.{{.Name}}
 nginx:
   image: nginx
   volumes:
@@ -35,6 +35,8 @@ nginx:
     - VIRTUAL_HOST=d.ermaker.tk
   restart: always
   log_driver: fluentd
+  log_opt:
+    tag: tag.raw.docker.{{.Name}}
 nginx-proxy:
   image: jwilder/nginx-proxy
   volumes:
@@ -44,4 +46,4 @@ nginx-proxy:
   restart: always
   log_driver: fluentd
   log_opt:
-    tag: docker.{{.Name}}
+    tag: tag.raw.docker.{{.Name}}

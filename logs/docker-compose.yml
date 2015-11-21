@@ -19,8 +19,7 @@ kibana:
     - es
   restart: always
 fluentd:
-  image: seapy/fluentd-es
-  entrypoint: /usr/sbin/td-agent
+  image: ermaker/fluentd
   volumes:
     - ./fluentd/td-agent.conf:/etc/td-agent/td-agent.conf:ro
     - /var/lib/docker:/var/lib/docker
@@ -28,4 +27,5 @@ fluentd:
     - es
   ports:
     - '24224:24224'
+    - '24224:24224/udp'
   restart: always
