@@ -39,8 +39,8 @@ Vagrant.configure(2) do |config|
     config.vm.provision :shell, inline: <<-EOC
       cd /vagrant/log
       ./mkdirs.sh
-      docker-compose restart
       docker-compose pull
+      docker-compose stop
       docker-compose up -d
     EOC
 
@@ -64,8 +64,8 @@ Vagrant.configure(2) do |config|
     config.vm.provision :shell, inline: <<-EOC
       cd /vagrant/service
       ./mkdirs.sh
-      docker-compose restart
       docker-compose pull
+      docker-compose stop
       docker-compose up -d
     EOC
 
