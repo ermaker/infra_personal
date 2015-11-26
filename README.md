@@ -28,15 +28,36 @@ SERVICE_PORT_80=[YOUR_PORT]
 SERVICE_PORT_22=[YOUR_PORT]
 ```
 
-* `log/.env.fluentd` and `service/.env.fluentd`
+* `log/.env.es`
+
+```
+ES_HEAP_SIZE=[YOUR_HEAP_SIZE]
+```
+
+* `log/.env.fluentd`
 
 ```
 SHARED_KEY=[YOUR_SHARED_SECRET_KEY]
 ```
 
+* `service/.env.fluentd`
+
+```
+SHARED_KEY=[YOUR_SHARED_SECRET_KEY]
+FORWARD_PORT_24284_TCP_ADDR=[YOUR_FLUENTD_ADDR]
+FORWARD_PORT_24284_TCP_PORT=[YOUR_FLUENTD_PORT]
+```
+
+* `log/.env.kibana`, `log/.env.nginx`, and `service/.env.nginx`
+
+```
+VIRTUAL_HOST=[YOUR_VIRTUAL_HOST]
+```
+
 * `service/.env.mshard`
 
 ```
+VIRTUAL_HOST=[YOUR_VIRTUAL_HOST]
 PUSHBULLET_ACCESS_TOKEN=[YOUR_PUSHBULLET_ACCESS_TOKEN]
 SECRET_KEY_BASE=[YOUR_SECRET_KEY_BASE]
 ```

@@ -1,20 +1,18 @@
 es:
   image: ermaker/elasticsearch
+  env_file: .env.es
   user: '1000'
   volumes:
     - /opt/elasticsearch/data:/opt/elasticsearch/data
     - ./elasticsearch/elasticsearch.yml:/opt/elasticsearch/config/elasticsearch.yml:ro
     - /etc/passwd:/etc/passwd:ro
     - /etc/group:/etc/group:ro
-  environment:
-    - ES_HEAP_SIZE=1g
   restart: always
 kibana:
   image: ermaker/kibana
   volumes:
     - ./kibana/kibana.yml:/opt/kibana/config/kibana.yml:ro
-  environment:
-    - VIRTUAL_HOST=kibana.d.ermaker.tk
+  env_file: .env.kibana
   links:
     - es
   restart: always
@@ -31,10 +29,9 @@ fluentd:
   restart: always
 nginx:
   image: nginx
+  env_file: .env.nginx
   volumes:
     - ./html/:/usr/share/nginx/html:ro
-  environment:
-    - VIRTUAL_HOST=d.ermaker.tk
   restart: always
 nginx-proxy:
   image: jwilder/nginx-proxy

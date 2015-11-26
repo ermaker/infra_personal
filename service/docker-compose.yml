@@ -15,15 +15,12 @@ mshard:
   links:
     - redis
   env_file: .env.mshard
-  environment:
-    - VIRTUAL_HOST=mshard.d.ermaker.tk
   restart: always
 nginx:
   image: nginx
+  env_file: .env.nginx
   volumes:
     - ./html/:/usr/share/nginx/html:ro
-  environment:
-    - VIRTUAL_HOST=d.ermaker.tk
   restart: always
 nginx-proxy:
   image: jwilder/nginx-proxy
