@@ -29,12 +29,12 @@ Vagrant.configure(2) do |config|
 
     config.vm.network "public_network"
 
-    config.vm.network "forwarded_port", guest: 80, host: 8080
-    config.vm.network "forwarded_port", guest: 24284, host: 24284
+    config.vm.network "forwarded_port", guest: 80, host: ENV['LOG_PORT_80']
+    config.vm.network "forwarded_port", guest: 24284, host: ENV['LOG_PORT_24284']
 
     # ssh settings
-    config.vm.network "forwarded_port", guest: 22, host: 3333
-    config.ssh.port = 3333
+    config.vm.network "forwarded_port", guest: 22, host: ENV['LOG_PORT_22']
+    config.ssh.port = ENV['LOG_PORT_22']
 
     config.vm.provision :shell, inline: <<-EOC
       cd /vagrant/log
@@ -45,8 +45,8 @@ Vagrant.configure(2) do |config|
     EOC
 
     config.vm.provider "virtualbox" do |vb|
-      vb.cpus = 2
-      vb.memory = 1024 * 4
+      vb.cpus = ENV['LOG_CPUS']
+      vb.memory = ENV['LOG_MEMORY']
     end
   end
 
@@ -55,11 +55,11 @@ Vagrant.configure(2) do |config|
 
     config.vm.network "public_network"
 
-    config.vm.network "forwarded_port", guest: 80, host: 80
+    config.vm.network "forwarded_port", guest: 80, host: ENV['SERVICE_PORT_80']
 
     # ssh settings
-    config.vm.network "forwarded_port", guest: 22, host: 3334
-    config.ssh.port = 3334
+    config.vm.network "forwarded_port", guest: 22, host: ENV['SERVICE_PORT_22']
+    config.ssh.port = ENV['SERVICE_PORT_22']
 
     config.vm.provision :shell, inline: <<-EOC
       cd /vagrant/service
