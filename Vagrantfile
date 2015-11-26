@@ -1,3 +1,24 @@
+require 'set'
+
+# Get env files and example files
+env_list = Dir['**/.env*'].group_by { |fn| fn.end_with?('.example') }
+examples = env_list[true]
+envs = env_list[false]
+
+# Abort if files do not exist
+no_examples = envs.map { |fn| fn + '.example' } - examples
+no_envs = examples.map { |fn| fn[0...-'.example'.size] } - envs
+no_files = no_examples + no_envs
+abort "Required: #{no_files}" unless no_files.empty?
+
+# Abort if files have different contents
+differences = envs.map { |fn| [fn, fn + '.example'] }.reject do |env,example|
+  env_vars = File.read(env).scan(/^(.+?)=/)
+  example_vars = File.read(example).scan(/^(.+?)=/)
+  env_vars.to_set == example_vars.to_set
+end
+abort "Different: #{differences}" unless differences.empty?
+
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
 
