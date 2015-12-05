@@ -1,3 +1,8 @@
+iptime_rebooter:
+  image: ermaker/iptime_rebooter
+  env_file: .env.iptime_rebooter
+  command: sh -c 'yes "bundle exec rake reboot; sleep 43200" | /bin/bash'
+  restart: always
 redis:
   image: redis
   command: redis-server --appendonly yes
