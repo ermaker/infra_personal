@@ -39,5 +39,6 @@ fluentd:
   env_file: .env.fluentd
   volumes:
     - ./fluentd/td-agent.conf:/etc/td-agent/td-agent.conf:ro
+    - ../fluentd.conf:/etc/td-agent/conf.d:ro
     - /var/lib/docker:/var/lib/docker
   restart: always
