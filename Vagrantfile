@@ -62,6 +62,7 @@ Vagrant.configure(2) do |config|
       ./mkdirs.sh
       docker-compose pull
       docker-compose stop
+      docker-compose rm -f
       docker-compose up -d
     EOC
 
@@ -87,6 +88,7 @@ Vagrant.configure(2) do |config|
       ./mkdirs.sh
       docker-compose pull
       docker-compose stop
+      docker-compose rm -f
       docker-compose up -d
     EOC
 
